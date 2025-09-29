@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+@theme {
+  --color-aero-blue: #3b82f6;
+  --color-aero-dark: #1e40af;
+  --color-aero-light: #60a5fa;
+  --color-aero-green: #10b981;
+  --color-aero-yellow: #f59e0b;
+  --color-aero-purple: #8b5cf6;
+  --color-aero-gray: #6b7280;
+  --color-aero-dark-bg: #1f2937;
+  --color-aero-card-bg: rgba(255, 255, 255, 0.25);
+  --color-aero-border: rgba(255, 255, 255, 0.5);
+
+  --gradient-aero-bg: linear-gradient(
+    to bottom right,
+    #1e3a8a 0%,
+    #1e40af 25%,
+    #3b82f6 50%,
+    #6366f1 75%,
+    #8b5cf6 100%
+  );
+
+  --shadow-aero-glow: 0 0 25px rgba(59, 130, 246, 0.6);
+  --shadow-aero-card: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+@layer base {
+  html {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: var(--gradient-aero-bg);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    background: var(--color-aero-card-bg);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-aero-border);
+    border-radius: 12px;
+  }
+
+  .gradient-text {
+    background: linear-gradient(
+      to right,
+      var(--color-aero-light),
+      var(--color-aero-purple)
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .chart-container {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(16px);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .aero-card {
+    background: var(--color-aero-card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--color-aero-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-aero-glow), var(--shadow-aero-card);
+    color: white;
+  }
+
+  .chart-container h3 {
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .aero-card h3 {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .aero-card p {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Chart labels styling */
+  .recharts-text {
+    fill: #ffffff !important;
+    font-weight: 500;
+  }
+
+  .recharts-cartesian-axis-tick-value {
+    fill: #ffffff !important;
+  }
+
+  .recharts-label {
+    fill: #ffffff !important;
+    font-weight: 500;
+  }
+
+  .aero-button {
+    background: var(--color-aero-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .aero-button:hover {
+    background: var(--color-aero-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Animation for loading */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Map container fixes */
+.leaflet-container {
+  background: #1a1a2e !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(31, 41, 55, 0.95) !important;
+  color: white !important;
+  border-radius: 8px !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(31, 41, 55, 0.95) !important;
+}
