@@ -105,11 +105,11 @@ export const FlightProvider: React.FC<FlightProviderProps> = ({ children }) => {
     };
   };
 
-  const fetchData = async () => {
+  const fetchData = async (forceRefresh = false) => {
     try {
       setLoading(true);
       setError(null);
-      const data = await OpenSkyService.getAllFlights();
+      const data = await OpenSkyService.getAllFlights(forceRefresh);
       setFlights(data);
       setLastUpdate(new Date());
     } catch (err) {
@@ -123,7 +123,7 @@ export const FlightProvider: React.FC<FlightProviderProps> = ({ children }) => {
   };
 
   const refreshData = async () => {
-    await fetchData();
+    await fetchData(true); // Force refresh from API
   };
 
   const getFlightById = (icao24: string): FlightData | undefined => {
@@ -135,8 +135,8 @@ export const FlightProvider: React.FC<FlightProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, 30000); // Update every 30 seconds
+    fetchData(); // First load - will use cache if available
+    const interval = setInterval(() => fetchData(), 300000); // Update every 5 minutes (cache duration)
 
     return () => clearInterval(interval);
   }, []);

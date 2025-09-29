@@ -9,7 +9,7 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 function App() {
   return (
     <FlightProvider>
-      <Router basename="/aero-app">
+      <Router basename={import.meta.env.PROD ? "/aero-app" : ""}>
         <div className="min-h-screen">
           <Navigation />
           <Routes>

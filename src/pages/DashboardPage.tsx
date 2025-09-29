@@ -14,7 +14,7 @@ import {
   ScatterChart,
   Scatter,
 } from "recharts";
-import { Plane, MapPin, Activity, TrendingUp } from "lucide-react";
+import { Plane, MapPin, Activity, TrendingUp, RefreshCw } from "lucide-react";
 
 const COLORS = [
   "var(--color-aero-blue)",
@@ -25,7 +25,25 @@ const COLORS = [
 ];
 
 export const DashboardPage: React.FC = () => {
-  const { stats, loading, lastUpdate, error } = useFlightContext();
+  const { stats, loading, lastUpdate, error, refreshData } = useFlightContext();
+  const [isFromCache, setIsFromCache] = React.useState(false);
+
+  // Check if data is from cache by looking at console logs
+  React.useEffect(() => {
+    const originalLog = console.log;
+    console.log = (...args) => {
+      if (args[0]?.includes?.("Using cached")) {
+        setIsFromCache(true);
+      } else if (args[0]?.includes?.("Fetching fresh")) {
+        setIsFromCache(false);
+      }
+      originalLog(...args);
+    };
+
+    return () => {
+      console.log = originalLog;
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -80,13 +98,27 @@ export const DashboardPage: React.FC = () => {
           <p className="text-lg" style={{ color: "var(--color-aero-light)" }}>
             Live Flight Tracking & Analytics
           </p>
-          <p
-            className="text-sm mt-2"
-            style={{ color: "var(--color-aero-light)" }}
-          >
-            Last updated: {lastUpdate.toLocaleTimeString()} |{" "}
-            {stats.totalFlights} aircraft in the air
-          </p>
+          <div className="flex items-center justify-center gap-4 mt-2">
+            <p className="text-sm" style={{ color: "var(--color-aero-light)" }}>
+              Last updated: {lastUpdate.toLocaleTimeString()} |{" "}
+              {stats.totalFlights} aircraft in the air
+              {isFromCache && (
+                <span className="ml-2 px-2 py-1 bg-yellow-600 text-yellow-100 rounded text-xs">
+                  📦 Cached
+                </span>
+              )}
+            </p>
+            <button
+              onClick={refreshData}
+              disabled={loading}
+              className="flex items-center gap-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+              />
+              Refresh
+            </button>
+          </div>
         </div>
 
         {/* Stats Cards */}

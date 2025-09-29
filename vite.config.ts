@@ -3,13 +3,13 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react(), tailwindcss()],
-  base: "/aero-app/",
+  base: command === "build" ? "/aero-app/" : "/",
   root: ".",
   publicDir: "public",
   build: {
     outDir: "dist",
     sourcemap: false,
   },
-});
+}));
