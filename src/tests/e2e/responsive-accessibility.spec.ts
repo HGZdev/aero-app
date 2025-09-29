@@ -1,5 +1,22 @@
 import { test, expect } from "@playwright/test";
 
+/**
+ * Responsive Design and Accessibility Tests
+ *
+ * Comprehensive tests for responsive design across different screen sizes
+ * and accessibility features including ARIA attributes, keyboard navigation,
+ * and screen reader compatibility. Also includes performance and error handling tests.
+ *
+ * Features tested:
+ * - Responsive design on desktop, tablet, and mobile devices
+ * - ARIA landmarks and roles
+ * - Form labels and descriptions
+ * - Button accessibility
+ * - Chart accessibility
+ * - Loading and error states
+ * - Data caching and performance
+ * - Error handling scenarios
+ */
 test.describe("Responsive Design Tests", () => {
   test("should work on desktop (1920x1080)", async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
@@ -334,7 +351,7 @@ test.describe("Data Loading and Caching Tests", () => {
     // Verify data is still there
     const flightCountText = await flightCountElement.textContent();
     expect(flightCountText).toMatch(/^\d+$/);
-    
+
     const aircraftCount = parseInt(flightCountText || "0");
     expect(aircraftCount).toBeGreaterThanOrEqual(0);
   });
@@ -362,12 +379,14 @@ test.describe("Data Loading and Caching Tests", () => {
     // Check for data source indicators
     const cacheIndicator = page.locator("span:has-text('📦 Cached')");
     const mockIndicator = page.locator("span:has-text('🎭 Mock Data')");
-    const autoRefreshIndicator = page.locator("span:has-text('🔄 Auto-refresh')");
+    const autoRefreshIndicator = page.locator(
+      "span:has-text('🔄 Auto-refresh')"
+    );
 
     // Verify data is still valid
     const flightCountText = await flightCountElement.textContent();
     expect(flightCountText).toMatch(/^\d+$/);
-    
+
     const aircraftCount = parseInt(flightCountText || "0");
     expect(aircraftCount).toBeGreaterThanOrEqual(0);
   });

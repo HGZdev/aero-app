@@ -1,5 +1,19 @@
 import { test, expect } from "@playwright/test";
 
+/**
+ * Basic App Tests
+ *
+ * Fundamental tests that verify the basic functionality and structure
+ * of the Aero Dashboard application. These tests ensure the core
+ * components are working correctly before more complex scenarios.
+ *
+ * Features tested:
+ * - Basic routing and navigation
+ * - Page structure and layout
+ * - Essential UI components
+ * - Error handling
+ * - Responsive design basics
+ */
 test.describe("Basic App Tests", () => {
   test("should redirect from / to /aero-app", async ({ page }) => {
     await page.goto("/");

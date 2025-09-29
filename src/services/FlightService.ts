@@ -1,4 +1,5 @@
 // Simplified Flight Service - replaces complex DDD architecture
+import { MockDataService } from "./MockDataService";
 
 export interface FlightData {
   icao24: string;
@@ -191,16 +192,14 @@ export class FlightService {
 
   // Get all flights
   static async getAllFlights(forceRefresh = false): Promise<FlightData[]> {
-    // In test mode, return empty data to avoid API calls
-    const isTestMode =
+    // Check if mock data should be used (test mode or explicit mock mode)
+    const useMockData =
       import.meta.env.MODE === "test" ||
-      (typeof window !== "undefined" &&
-        window.location.hostname === "localhost" &&
-        window.location.port === "5173");
+      import.meta.env.VITE_USE_MOCK_DATA === "true";
 
-    if (isTestMode) {
-      console.log("🧪 Test mode: returning empty flight data");
-      return [];
+    if (useMockData) {
+      const mockType = import.meta.env.VITE_MOCK_DATA_TYPE || "all";
+      return MockDataService.getMockData(mockType);
     }
 
     // Check cache first
@@ -251,14 +250,17 @@ export class FlightService {
     } catch (error) {
       console.error("Error fetching flights:", error);
 
-      // If API fails, try to return cached data
+      // If API fails, try to return cached data first
       const cached = this.getCachedData();
       if (cached) {
         console.log("API failed, using cached data");
         return cached.data;
       }
 
-      throw error;
+      // If no cached data available, fall back to mock data
+      console.log("No cached data available, falling back to mock data");
+      const mockType = import.meta.env.VITE_MOCK_DATA_TYPE || "all";
+      return MockDataService.getMockData(mockType);
     }
   }
 
@@ -286,7 +288,20 @@ export class FlightService {
       return data.states.map((state: any) => this.parseFlightState(state));
     } catch (error) {
       console.error("Error fetching flights in bounds:", error);
-      throw error;
+
+      // Fall back to mock data filtered by bounds
+      const mockType = import.meta.env.VITE_MOCK_DATA_TYPE || "all";
+      const mockFlights = MockDataService.getMockData(mockType);
+
+      return mockFlights.filter(
+        (flight) =>
+          flight.latitude &&
+          flight.longitude &&
+          flight.latitude >= minLat &&
+          flight.latitude <= maxLat &&
+          flight.longitude >= minLon &&
+          flight.longitude <= maxLon
+      );
     }
   }
 

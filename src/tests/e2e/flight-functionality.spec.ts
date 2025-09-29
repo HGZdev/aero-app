@@ -1,5 +1,21 @@
 import { test, expect } from "@playwright/test";
 
+/**
+ * Flight Functionality Tests
+ *
+ * Tests focused on flight data functionality, including data loading,
+ * statistics display, charts rendering, and interactive features.
+ * These tests verify that flight data is properly processed and displayed
+ * across different pages and components.
+ *
+ * Features tested:
+ * - Flight data loading and statistics
+ * - Chart rendering and data visualization
+ * - Refresh functionality
+ * - Map integration with flight data
+ * - Flights list functionality
+ * - Search and filtering capabilities
+ */
 test.describe("Flight Data Tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/aero-app");

@@ -47,12 +47,11 @@ A modern React application for tracking and visualizing live flight data using t
 
 ## Environment Variables
 
-| Variable              | Description             | Default | Options               |
-| --------------------- | ----------------------- | ------- | --------------------- |
-| `VITE_REFRESH_RUN`    | Enable auto-refresh     | `false` | `true`/`false`        |
-| `VITE_USE_MOCK_DATA`  | Use mock data           | `true`  | `true`/`false`        |
-| `VITE_MOCK_DATA_TYPE` | Mock data set           | `all`   | `all`/`europe`/`asia` |
-| `VITE_ENABLE_LOGGING` | Enable detailed logging | `true`  | `true`/`false`        |
+| Variable              | Description         | Default | Options               |
+| --------------------- | ------------------- | ------- | --------------------- |
+| `VITE_REFRESH_RUN`    | Enable auto-refresh | `false` | `true`/`false`        |
+| `VITE_USE_MOCK_DATA`  | Use mock data       | `true`  | `true`/`false`        |
+| `VITE_MOCK_DATA_TYPE` | Mock data set       | `all`   | `all`/`europe`/`asia` |
 
 ## Auto-Refresh Configuration
 

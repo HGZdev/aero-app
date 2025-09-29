@@ -1,5 +1,23 @@
 import { test, expect } from "@playwright/test";
 
+/**
+ * Aero App E2E Tests
+ *
+ * Comprehensive end-to-end tests for the Aero Dashboard application.
+ * These tests verify the core functionality, navigation, and user interface
+ * components across different pages and scenarios.
+ *
+ * Features tested:
+ * - Application routing and redirects
+ * - Navigation bar functionality
+ * - Page navigation between Dashboard, Map, and Flights
+ * - Dashboard page elements and statistics
+ * - Refresh button functionality
+ * - Map page loading and display
+ * - Flights list page structure
+ * - 404 error handling
+ * - Mobile responsiveness
+ */
 test.describe("Aero App E2E Tests", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the app before each test

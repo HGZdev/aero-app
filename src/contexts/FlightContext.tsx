@@ -11,6 +11,7 @@ import {
   type FlightStats,
   type FlightData,
 } from "../services/FlightService";
+import { MockDataService } from "../services/MockDataService";
 
 interface FlightContextType {
   flights: FlightData[];
@@ -80,15 +81,20 @@ export const FlightProvider: React.FC<FlightProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    // In test mode, don't fetch data to avoid API calls
-    const isTestMode =
+    // Check if we should use mock data (test mode or explicit mock mode)
+    const useMockData =
       import.meta.env.MODE === "test" ||
-      (typeof window !== "undefined" &&
-        window.location.hostname === "localhost" &&
-        window.location.port === "5173");
+      import.meta.env.VITE_USE_MOCK_DATA === "true";
 
-    if (isTestMode) {
-      console.log("🧪 Test mode: skipping data fetch");
+    if (useMockData) {
+      console.log("🧪 Using mock data (test/mock mode)");
+      // Load mock data immediately
+      const mockType = import.meta.env.VITE_MOCK_DATA_TYPE || "all";
+      const mockFlights = MockDataService.getMockData(mockType);
+      setFlights(mockFlights);
+      setLastUpdate(new Date());
+      const stats = FlightService.calculateStats(mockFlights);
+      setStatistics(stats);
       setLoading(false);
       return;
     }

@@ -38,7 +38,7 @@ function App() {
   return (
     <ErrorBoundary>
       <FlightProvider>
-        <Router basename={import.meta.env.PROD ? "/aero-app" : ""}>
+        <Router>
           <div className="min-h-screen">
             <NetworkStatus isOnline={isOnline} lastError={lastError} />
             <Navigation />
