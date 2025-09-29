@@ -5,7 +5,9 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/aero-dashboard/",
+  base: "/aero-app/",
+  root: ".",
+  publicDir: "public",
   build: {
     outDir: "dist",
     sourcemap: false,
