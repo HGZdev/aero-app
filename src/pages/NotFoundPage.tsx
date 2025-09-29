@@ -28,7 +28,7 @@ export const NotFoundPage: React.FC = () => {
 
           <button
             onClick={() => window.history.back()}
-            className="flex items-center gap-2 px-6 py-3 bg-aero-gray-dark text-white rounded-lg hover:bg-aero-gray-darker transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-aero-gray-dark text-white rounded-lg hover:bg-aero-gray-dark transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Go Back

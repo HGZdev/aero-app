@@ -1,31 +1,40 @@
 @import "tailwindcss";
 
 @theme {
+  /* Podstawowe kolory */
   --color-aero-blue: #3b82f6;
   --color-aero-dark: #1e40af;
   --color-aero-light: #60a5fa;
   --color-aero-green: #10b981;
   --color-aero-yellow: #f59e0b;
   --color-aero-purple: #8b5cf6;
+  --color-white: #ffffff;
+
+  /* Szarości - tylko 3 odcienie */
   --color-aero-gray: #6b7280;
   --color-aero-gray-light: #9ca3af;
   --color-aero-gray-dark: #374151;
-  --color-aero-gray-darker: #1f2937;
-  --color-aero-dark-bg: #1f2937;
+
+  /* Przezroczyste kolory - tylko najpotrzebniejsze */
   --color-aero-card-bg: rgba(255, 255, 255, 0.25);
   --color-aero-border: rgba(255, 255, 255, 0.5);
+  --color-aero-white-20: rgba(255, 255, 255, 0.2);
+  --color-aero-white-40: rgba(255, 255, 255, 0.4);
+  --color-aero-black-50: rgba(0, 0, 0, 0.5);
+  --color-aero-blue-30: rgba(59, 130, 246, 0.3);
+  --color-aero-blue-40: rgba(59, 130, 246, 0.4);
 
   --gradient-aero-bg: linear-gradient(
     to bottom right,
-    #1e3a8a 0%,
-    #1e40af 25%,
-    #3b82f6 50%,
-    #6366f1 75%,
-    #8b5cf6 100%
+    var(--color-aero-dark) 0%,
+    var(--color-aero-dark) 25%,
+    var(--color-aero-blue) 50%,
+    var(--color-aero-purple) 75%,
+    var(--color-aero-purple) 100%
   );
 
-  --shadow-aero-glow: 0 0 25px rgba(59, 130, 246, 0.6);
-  --shadow-aero-card: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --shadow-aero-glow: 0 0 25px var(--color-aero-blue-40);
+  --shadow-aero-card: 0 12px 40px var(--color-aero-black-50);
 }
 
 @layer base {
@@ -62,12 +71,12 @@
   }
 
   .chart-container {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--color-aero-white-20);
     backdrop-filter: blur(16px);
     border-radius: 12px;
     padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--color-aero-white-40);
+    box-shadow: var(--shadow-aero-card);
   }
 
   .aero-card {
@@ -82,29 +91,29 @@
 
   .chart-container h3 {
     color: white !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 4px var(--color-aero-black-50);
   }
 
   .aero-card h3 {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 4px var(--color-aero-black-50);
   }
 
   .aero-card p {
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 2px var(--color-aero-black-50);
   }
 
   /* Chart labels styling */
   .recharts-text {
-    fill: #ffffff !important;
+    fill: var(--color-white) !important;
     font-weight: 500;
   }
 
   .recharts-cartesian-axis-tick-value {
-    fill: #ffffff !important;
+    fill: var(--color-white) !important;
   }
 
   .recharts-label {
-    fill: #ffffff !important;
+    fill: var(--color-white) !important;
     font-weight: 500;
   }
 
@@ -116,13 +125,13 @@
     padding: 0.75rem 1.5rem;
     font-weight: 600;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 12px var(--color-aero-blue-30);
   }
 
   .aero-button:hover {
     background: var(--color-aero-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 6px 20px var(--color-aero-blue-40);
   }
 }
 
@@ -132,17 +141,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-aero-white-20);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--color-aero-white-40);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--color-aero-border);
 }
 
 /* Animation for loading */
@@ -162,15 +171,15 @@
 
 /* Map container fixes */
 .leaflet-container {
-  background: #1a1a2e !important;
+  background: var(--color-aero-gray-dark) !important;
 }
 
 .leaflet-popup-content-wrapper {
-  background: rgba(31, 41, 55, 0.95) !important;
+  background: var(--color-aero-gray-dark) !important;
   color: white !important;
   border-radius: 8px !important;
 }
 
 .leaflet-popup-tip {
-  background: rgba(31, 41, 55, 0.95) !important;
+  background: var(--color-aero-gray-dark) !important;
 }

@@ -94,21 +94,27 @@ export const DashboardPage: React.FC = () => {
     : [];
 
   return (
-    <div className="min-h-screen">
+    <div data-testid="dashboard-page" className="min-h-screen">
       {loading && <LoadingOverlay />}
       {error && <ErrorBanner />}
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+          <h1
+            data-testid="dashboard-title"
+            className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3"
+          >
             <Plane className="h-10 w-10 text-aero-light" />
             Aero Dashboard
           </h1>
-          <p className="text-lg text-aero-light">
+          <p
+            data-testid="dashboard-subtitle"
+            className="text-lg text-aero-light"
+          >
             Live Flight Tracking & Analytics
           </p>
           <div className="flex items-center justify-center gap-4 mt-2">
-            <p className="text-sm text-aero-light">
+            <p data-testid="dashboard-info" className="text-sm text-aero-light">
               Last updated: {lastUpdate.toLocaleTimeString()} |{" "}
               {statistics?.totalFlights || 0} aircraft in the air
               {isFromCache && (
@@ -128,6 +134,7 @@ export const DashboardPage: React.FC = () => {
               )}
             </p>
             <button
+              data-testid="refresh-button"
               onClick={refreshData}
               disabled={loading}
               className="flex items-center gap-2 px-3 py-1 bg-aero-blue hover:bg-aero-dark disabled:bg-aero-gray-dark text-white rounded-lg transition-colors text-sm"
@@ -141,31 +148,52 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="aero-card text-center">
+        <div
+          data-testid="stats-cards"
+          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
+        >
+          <div
+            data-testid="stat-aircraft-tracked"
+            className="aero-card text-center"
+          >
             <Plane className="h-8 w-8 mx-auto mb-2 text-aero-light" />
-            <h3 className="text-2xl font-bold text-white">
+            <h3
+              data-testid="stat-aircraft-count"
+              className="text-2xl font-bold text-white"
+            >
               {statistics?.totalFlights || 0}
             </h3>
             <p className="text-aero-light">Aircraft Tracked</p>
           </div>
-          <div className="aero-card text-center">
+          <div data-testid="stat-countries" className="aero-card text-center">
             <MapPin className="h-8 w-8 mx-auto mb-2 text-aero-green" />
-            <h3 className="text-2xl font-bold text-white">
+            <h3
+              data-testid="stat-countries-count"
+              className="text-2xl font-bold text-white"
+            >
               {statistics?.countriesCount || 0}
             </h3>
             <p className="text-aero-light">Countries</p>
           </div>
-          <div className="aero-card text-center">
+          <div data-testid="stat-avg-speed" className="aero-card text-center">
             <Activity className="h-8 w-8 mx-auto mb-2 text-aero-yellow" />
-            <h3 className="text-2xl font-bold text-white">
+            <h3
+              data-testid="stat-speed-value"
+              className="text-2xl font-bold text-white"
+            >
               {statistics ? Math.round(statistics.avgSpeed) : 0} km/h
             </h3>
             <p className="text-aero-light">Avg Speed</p>
           </div>
-          <div className="aero-card text-center">
+          <div
+            data-testid="stat-avg-altitude"
+            className="aero-card text-center"
+          >
             <TrendingUp className="h-8 w-8 mx-auto mb-2 text-aero-purple" />
-            <h3 className="text-2xl font-bold text-white">
+            <h3
+              data-testid="stat-altitude-value"
+              className="text-2xl font-bold text-white"
+            >
               {statistics ? Math.round(statistics.avgAltitude / 1000) : 0} km
             </h3>
             <p className="text-aero-light">Avg Altitude</p>
@@ -173,32 +201,41 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div
+          data-testid="charts-grid"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
+        >
           {/* Altitude Distribution */}
-          <div className="chart-container">
+          <div
+            data-testid="chart-altitude-distribution"
+            className="chart-container"
+          >
             <h3 className="text-xl font-semibold text-white mb-4">
               Altitude Distribution
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={altitudeChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#6B7280" />
-                <XAxis dataKey="range" stroke="#FFFFFF" />
-                <YAxis stroke="#FFFFFF" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--color-aero-gray)"
+                />
+                <XAxis dataKey="range" stroke="var(--color-white)" />
+                <YAxis stroke="var(--color-white)" />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#1F2937",
-                    border: "1px solid #374151",
+                    backgroundColor: "var(--color-aero-gray-dark)",
+                    border: "1px solid var(--color-aero-gray-dark)",
                     borderRadius: "8px",
                     color: "white",
                   }}
                 />
-                <Bar dataKey="count" fill="#3B82F6" />
+                <Bar dataKey="count" fill="var(--color-aero-blue)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           {/* Top Countries */}
-          <div className="chart-container">
+          <div data-testid="chart-top-countries" className="chart-container">
             <h3 className="text-xl font-semibold text-white mb-4">
               Top Countries by Aircraft Count
             </h3>
@@ -207,52 +244,69 @@ export const DashboardPage: React.FC = () => {
                 data={statistics?.topCountries || []}
                 layout="horizontal"
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#6B7280" />
-                <XAxis type="number" stroke="#FFFFFF" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--color-aero-gray)"
+                />
+                <XAxis type="number" stroke="var(--color-white)" />
                 <YAxis
                   dataKey="country"
                   type="category"
-                  stroke="#FFFFFF"
+                  stroke="var(--color-white)"
                   width={80}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#1F2937",
-                    border: "1px solid #374151",
+                    backgroundColor: "var(--color-aero-gray-dark)",
+                    border: "1px solid var(--color-aero-gray-dark)",
                     borderRadius: "8px",
                     color: "white",
                   }}
                 />
-                <Bar dataKey="count" fill="#10B981" />
+                <Bar dataKey="count" fill="var(--color-aero-green)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           {/* Speed vs Altitude */}
-          <div className="chart-container">
+          <div data-testid="chart-speed-altitude" className="chart-container">
             <h3 className="text-xl font-semibold text-white mb-4">
               Speed vs Altitude
             </h3>
             <ResponsiveContainer width="100%" height={300}>
               <ScatterChart data={statistics?.speedAltitudeCorrelation || []}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#6B7280" />
-                <XAxis dataKey="speed" name="Speed" stroke="#FFFFFF" />
-                <YAxis dataKey="altitude" name="Altitude" stroke="#FFFFFF" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--color-aero-gray)"
+                />
+                <XAxis
+                  dataKey="speed"
+                  name="Speed"
+                  stroke="var(--color-white)"
+                />
+                <YAxis
+                  dataKey="altitude"
+                  name="Altitude"
+                  stroke="var(--color-white)"
+                />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#1F2937",
-                    border: "1px solid #374151",
+                    backgroundColor: "var(--color-aero-gray-dark)",
+                    border: "1px solid var(--color-aero-gray-dark)",
                     borderRadius: "8px",
                     color: "white",
                   }}
                 />
-                <Scatter dataKey="altitude" fill="#F59E0B" />
+                <Scatter dataKey="altitude" fill="var(--color-aero-yellow)" />
               </ScatterChart>
             </ResponsiveContainer>
           </div>
 
           {/* Country Distribution Pie */}
-          <div className="chart-container">
+          <div
+            data-testid="chart-country-distribution"
+            className="chart-container"
+          >
             <h3 className="text-xl font-semibold text-white mb-4">
               Country Distribution
             </h3>
@@ -267,7 +321,7 @@ export const DashboardPage: React.FC = () => {
                     `${name} ${(percent * 100).toFixed(0)}%`
                   }
                   outerRadius={80}
-                  fill="#8884d8"
+                  fill="var(--color-aero-purple)"
                   dataKey="value"
                 >
                   {pieData.map((_, index) => (
@@ -279,8 +333,8 @@ export const DashboardPage: React.FC = () => {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#1F2937",
-                    border: "1px solid #374151",
+                    backgroundColor: "var(--color-aero-gray-dark)",
+                    border: "1px solid var(--color-aero-gray-dark)",
                     borderRadius: "8px",
                     color: "white",
                   }}

@@ -62,43 +62,51 @@ export const FlightsListPage: React.FC = () => {
     });
 
   return (
-    <div className="min-h-screen">
+    <div data-testid="flights-list-page" className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+          <h1
+            data-testid="flights-title"
+            className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3"
+          >
             <Plane className="h-10 w-10 text-aero-light" />
             Flights List
           </h1>
-          <p className="text-lg text-aero-light">
+          <p data-testid="flights-subtitle" className="text-lg text-aero-light">
             Detailed aircraft information
           </p>
-          <p className="text-sm mt-2 text-aero-light">
+          <p
+            data-testid="flights-info"
+            className="text-sm mt-2 text-aero-light"
+          >
             Last updated: {lastUpdate.toLocaleTimeString()} |{" "}
             {filteredFlights.length} of {flights.length} aircraft
           </p>
         </div>
 
         {/* Filters */}
-        <div className="aero-card mb-8">
+        <div data-testid="filters-section" className="aero-card mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-aero-gray-light" />
               <input
+                data-testid="search-input"
                 type="text"
                 placeholder="Search by callsign or ICAO24..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-aero-gray-darker border border-aero-gray-dark rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-aero-blue"
+                className="w-full pl-10 pr-4 py-2 bg-aero-gray-dark border border-aero-gray-dark rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-aero-blue"
               />
             </div>
 
             <div className="relative">
               <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-aero-gray-light" />
               <select
+                data-testid="country-filter"
                 value={filterCountry}
                 onChange={(e) => setFilterCountry(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-aero-gray-darker border border-aero-gray-dark rounded-lg text-white focus:outline-none focus:border-aero-blue"
+                className="w-full pl-10 pr-4 py-2 bg-aero-gray-dark border border-aero-gray-dark rounded-lg text-white focus:outline-none focus:border-aero-blue"
               >
                 <option value="">All Countries</option>
                 {countries.map((country) => (
@@ -111,9 +119,10 @@ export const FlightsListPage: React.FC = () => {
 
             <div className="relative">
               <select
+                data-testid="sort-select"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full px-4 py-2 bg-aero-gray-darker border border-aero-gray-dark rounded-lg text-white focus:outline-none focus:border-aero-blue"
+                className="w-full px-4 py-2 bg-aero-gray-dark border border-aero-gray-dark rounded-lg text-white focus:outline-none focus:border-aero-blue"
               >
                 <option value="callsign">Sort by Callsign</option>
                 <option value="country">Sort by Country</option>
@@ -125,30 +134,51 @@ export const FlightsListPage: React.FC = () => {
         </div>
 
         {/* Flights Table */}
-        <div className="aero-card">
+        <div data-testid="flights-table" className="aero-card">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-aero-gray-dark">
-                  <th className="text-left py-3 px-4 text-white font-semibold">
+                  <th
+                    data-testid="th-callsign"
+                    className="text-left py-3 px-4 text-white font-semibold"
+                  >
                     Callsign
                   </th>
-                  <th className="text-left py-3 px-4 text-white font-semibold">
+                  <th
+                    data-testid="th-icao24"
+                    className="text-left py-3 px-4 text-white font-semibold"
+                  >
                     ICAO24
                   </th>
-                  <th className="text-left py-3 px-4 text-white font-semibold">
+                  <th
+                    data-testid="th-country"
+                    className="text-left py-3 px-4 text-white font-semibold"
+                  >
                     Country
                   </th>
-                  <th className="text-left py-3 px-4 text-white font-semibold">
+                  <th
+                    data-testid="th-altitude"
+                    className="text-left py-3 px-4 text-white font-semibold"
+                  >
                     Altitude
                   </th>
-                  <th className="text-left py-3 px-4 text-white font-semibold">
+                  <th
+                    data-testid="th-speed"
+                    className="text-left py-3 px-4 text-white font-semibold"
+                  >
                     Speed
                   </th>
-                  <th className="text-left py-3 px-4 text-white font-semibold">
+                  <th
+                    data-testid="th-heading"
+                    className="text-left py-3 px-4 text-white font-semibold"
+                  >
                     Heading
                   </th>
-                  <th className="text-left py-3 px-4 text-white font-semibold">
+                  <th
+                    data-testid="th-position"
+                    className="text-left py-3 px-4 text-white font-semibold"
+                  >
                     Position
                   </th>
                 </tr>
@@ -158,7 +188,7 @@ export const FlightsListPage: React.FC = () => {
                   <tr
                     key={flight.icao24}
                     className={`border-b border-aero-gray-dark ${
-                      index % 2 === 0 ? "bg-aero-gray-darker/50" : ""
+                      index % 2 === 0 ? "bg-aero-gray-dark/50" : ""
                     }`}
                   >
                     <td className="py-3 px-4 text-white">

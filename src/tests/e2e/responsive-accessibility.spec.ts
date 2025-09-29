@@ -8,13 +8,15 @@ test.describe("Responsive Design Tests", () => {
 
     // Check if all navigation items are visible
     await expect(
-      page.locator('nav a:has-text("Dashboard")').first()
+      page.locator('[data-testid="nav-link-dashboard"]')
     ).toBeVisible();
-    await expect(page.locator("text=Map")).toBeVisible();
-    await expect(page.locator("text=Flights")).toBeVisible();
+    await expect(page.locator('[data-testid="nav-link-map"]')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="nav-link-flights"]')
+    ).toBeVisible();
 
     // Check if dashboard layout is proper
-    await expect(page.locator('h1:has-text("Aero Dashboard")')).toBeVisible();
+    await expect(page.locator('[data-testid="dashboard-title"]')).toBeVisible();
   });
 
   test("should work on tablet (768x1024)", async ({ page }) => {
@@ -23,13 +25,11 @@ test.describe("Responsive Design Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if navigation is still functional
-    await expect(page.locator("nav")).toBeVisible();
-    await expect(
-      page.locator('nav a:has-text("Aero Dashboard")')
-    ).toBeVisible();
+    await expect(page.locator('[data-testid="navigation"]')).toBeVisible();
+    await expect(page.locator('[data-testid="logo-link"]')).toBeVisible();
 
     // Check if dashboard content is visible
-    await expect(page.locator('h1:has-text("Aero Dashboard")')).toBeVisible();
+    await expect(page.locator('[data-testid="dashboard-title"]')).toBeVisible();
   });
 
   test("should work on mobile (375x667)", async ({ page }) => {
@@ -38,13 +38,11 @@ test.describe("Responsive Design Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if navigation is still visible
-    await expect(page.locator("nav")).toBeVisible();
-    await expect(
-      page.locator('nav a:has-text("Aero Dashboard")')
-    ).toBeVisible();
+    await expect(page.locator('[data-testid="navigation"]')).toBeVisible();
+    await expect(page.locator('[data-testid="logo-link"]')).toBeVisible();
 
     // Check if mobile navigation works
-    await page.click("text=Map");
+    await page.click('[data-testid="nav-link-map"]');
     await expect(page).toHaveURL("/aero-app/map");
   });
 
@@ -54,10 +52,8 @@ test.describe("Responsive Design Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if basic functionality works on very small screens
-    await expect(page.locator("nav")).toBeVisible();
-    await expect(
-      page.locator('nav a:has-text("Aero Dashboard")')
-    ).toBeVisible();
+    await expect(page.locator('[data-testid="navigation"]')).toBeVisible();
+    await expect(page.locator('[data-testid="logo-link"]')).toBeVisible();
   });
 });
 
@@ -67,7 +63,7 @@ test.describe("Accessibility Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if main heading is present
-    const h1 = page.locator("h1");
+    const h1 = page.locator('[data-testid="dashboard-title"]');
     await expect(h1).toBeVisible();
 
     // Check if heading contains expected text
@@ -78,10 +74,10 @@ test.describe("Accessibility Tests", () => {
     await page.goto("/aero-app");
 
     // Check if nav element is present
-    await expect(page.locator("nav")).toBeVisible();
+    await expect(page.locator('[data-testid="navigation"]')).toBeVisible();
 
     // Check if navigation links are properly structured
-    const navLinks = page.locator("nav a");
+    const navLinks = page.locator('[data-testid="navigation"] a');
     await expect(navLinks).toHaveCount(4); // Logo + 3 nav items
   });
 
@@ -90,14 +86,12 @@ test.describe("Accessibility Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if search input has proper placeholder
-    const searchInput = page.locator(
-      'input[placeholder*="Search by callsign"]'
-    );
+    const searchInput = page.locator('[data-testid="search-input"]');
     await expect(searchInput).toBeVisible();
 
     // Check if select elements are present
-    const selects = page.locator("select");
-    await expect(selects).toHaveCount(2);
+    await expect(page.locator('[data-testid="country-filter"]')).toBeVisible();
+    await expect(page.locator('[data-testid="sort-select"]')).toBeVisible();
   });
 
   test("should have proper button labels", async ({ page }) => {
@@ -105,7 +99,7 @@ test.describe("Accessibility Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if refresh button has proper text
-    const refreshButton = page.locator('button:has-text("Refresh")');
+    const refreshButton = page.locator('[data-testid="refresh-button"]');
     await expect(refreshButton).toBeVisible();
   });
 });
@@ -135,7 +129,7 @@ test.describe("Performance Tests", () => {
     expect(mapLoadTime).toBeLessThan(15000);
 
     // Check if map is interactive
-    await expect(page.locator(".leaflet-container")).toBeVisible();
+    await expect(page.locator('[data-testid="map-container"]')).toBeVisible();
   });
 });
 

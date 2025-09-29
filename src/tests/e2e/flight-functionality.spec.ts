@@ -9,13 +9,14 @@ test.describe("Flight Data Tests", () => {
   test("should display flight statistics when data loads", async ({ page }) => {
     // Wait for data to potentially load (with timeout)
     try {
-      await page.waitForSelector("text=Aircraft Tracked", { timeout: 15000 });
+      await page.waitForSelector('[data-testid="stat-aircraft-tracked"]', {
+        timeout: 15000,
+      });
 
       // Check if flight count is displayed
-      const flightCountElement = page
-        .locator("text=Aircraft Tracked")
-        .locator("..")
-        .locator("h3");
+      const flightCountElement = page.locator(
+        '[data-testid="stat-aircraft-count"]'
+      );
       await expect(flightCountElement).toBeVisible();
 
       // Verify that the count is a number
@@ -23,27 +24,35 @@ test.describe("Flight Data Tests", () => {
       expect(flightCountText).toMatch(/^\d+$/);
     } catch (error) {
       // If data doesn't load, just check that the structure is there
-      await expect(page.locator("text=Aircraft Tracked")).toBeVisible();
+      await expect(
+        page.locator('[data-testid="stat-aircraft-tracked"]')
+      ).toBeVisible();
     }
   });
 
   test("should display charts structure", async ({ page }) => {
     // Check if all chart containers are present
-    await expect(page.locator("text=Altitude Distribution")).toBeVisible();
     await expect(
-      page.locator("text=Top Countries by Aircraft Count")
+      page.locator('[data-testid="chart-altitude-distribution"]')
     ).toBeVisible();
-    await expect(page.locator("text=Speed vs Altitude")).toBeVisible();
-    await expect(page.locator("text=Country Distribution")).toBeVisible();
+    await expect(
+      page.locator('[data-testid="chart-top-countries"]')
+    ).toBeVisible();
+    await expect(
+      page.locator('[data-testid="chart-speed-altitude"]')
+    ).toBeVisible();
+    await expect(
+      page.locator('[data-testid="chart-country-distribution"]')
+    ).toBeVisible();
 
     // Check if chart containers have content (SVG elements)
-    const chartContainers = page.locator(".chart-container");
-    await expect(chartContainers).toHaveCount(4);
+    const chartContainers = page.locator('[data-testid="charts-grid"]');
+    await expect(chartContainers).toHaveCount(1);
   });
 
   test("should handle refresh button click", async ({ page }) => {
     // Check if refresh button is visible
-    const refreshButton = page.locator('button:has-text("Refresh")');
+    const refreshButton = page.locator('[data-testid="refresh-button"]');
     await expect(refreshButton).toBeVisible();
 
     // Click refresh button
@@ -65,7 +74,7 @@ test.describe("Map Functionality Tests", () => {
     await page.waitForSelector(".leaflet-container", { timeout: 15000 });
 
     // Check if map container is visible
-    await expect(page.locator(".leaflet-container")).toBeVisible();
+    await expect(page.locator('[data-testid="map-container"]')).toBeVisible();
 
     // Check if map tiles are loaded (look for leaflet tile elements)
     try {
@@ -79,7 +88,7 @@ test.describe("Map Functionality Tests", () => {
 
   test("should show flight count in header", async ({ page }) => {
     // Check if flight count is displayed in header
-    const flightCountText = page.locator("text=aircraft visible");
+    const flightCountText = page.locator('[data-testid="map-info"]');
     await expect(flightCountText).toBeVisible();
 
     // Verify it contains a number
@@ -96,20 +105,18 @@ test.describe("Flights List Functionality Tests", () => {
 
   test("should display flights table structure", async ({ page }) => {
     // Check if table headers are present
-    await expect(page.locator('th:has-text("Callsign")')).toBeVisible();
-    await expect(page.locator("text=ICAO24")).toBeVisible();
-    await expect(page.locator('th:has-text("Country")')).toBeVisible();
-    await expect(page.locator('th:has-text("Altitude")')).toBeVisible();
-    await expect(page.locator('th:has-text("Speed")')).toBeVisible();
-    await expect(page.locator("text=Heading")).toBeVisible();
-    await expect(page.locator("text=Position")).toBeVisible();
+    await expect(page.locator('[data-testid="th-callsign"]')).toBeVisible();
+    await expect(page.locator('[data-testid="th-icao24"]')).toBeVisible();
+    await expect(page.locator('[data-testid="th-country"]')).toBeVisible();
+    await expect(page.locator('[data-testid="th-altitude"]')).toBeVisible();
+    await expect(page.locator('[data-testid="th-speed"]')).toBeVisible();
+    await expect(page.locator('[data-testid="th-heading"]')).toBeVisible();
+    await expect(page.locator('[data-testid="th-position"]')).toBeVisible();
   });
 
   test("should have search and filter functionality", async ({ page }) => {
     // Check if search input is present
-    const searchInput = page.locator(
-      'input[placeholder*="Search by callsign"]'
-    );
+    const searchInput = page.locator('[data-testid="search-input"]');
     await expect(searchInput).toBeVisible();
 
     // Test search functionality
@@ -117,7 +124,7 @@ test.describe("Flights List Functionality Tests", () => {
     await page.waitForTimeout(500); // Wait for search to process
 
     // Check if select elements are present
-    const selects = page.locator("select");
-    await expect(selects).toHaveCount(2);
+    await expect(page.locator('[data-testid="country-filter"]')).toBeVisible();
+    await expect(page.locator('[data-testid="sort-select"]')).toBeVisible();
   });
 });

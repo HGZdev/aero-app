@@ -32,24 +32,27 @@ export const MapPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div data-testid="map-page" className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+          <h1
+            data-testid="map-title"
+            className="text-4xl font-bold text-white mb-2"
+          >
             Live Flight Map
           </h1>
-          <p className="text-lg text-aero-light">
+          <p data-testid="map-subtitle" className="text-lg text-aero-light">
             Real-time aircraft positions
           </p>
-          <p className="text-sm mt-2 text-aero-light">
+          <p data-testid="map-info" className="text-sm mt-2 text-aero-light">
             Last updated: {lastUpdate.toLocaleTimeString()} | {flights.length}{" "}
             aircraft visible
           </p>
         </div>
 
         {/* Map */}
-        <div className="chart-container">
+        <div data-testid="map-container" className="chart-container">
           <div className="h-[80vh] rounded-lg overflow-hidden">
             <MapContainer
               center={[50, 10]}
@@ -67,8 +70,8 @@ export const MapPage: React.FC = () => {
                     key={`${flight.icao24}-${index}`}
                     center={[flight.latitude!, flight.longitude!]}
                     radius={3}
-                    fillColor="#3B82F6"
-                    color="#1E40AF"
+                    fillColor="var(--color-aero-blue)"
+                    color="var(--color-aero-dark)"
                     weight={1}
                     opacity={0.8}
                     fillOpacity={0.6}
