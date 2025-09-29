@@ -63,10 +63,18 @@ export const DashboardPage: React.FC = () => {
 
   // Show loading overlay instead of replacing entire content
   const LoadingOverlay = () => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div
+      className="fixed inset-0 bg-overlay flex items-center justify-center z-50"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="loading-title"
+    >
       <div className="text-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-aero-light mx-auto mb-4"></div>
-        <h2 className="text-white text-xl font-semibold">
+        <div
+          className="animate-spin rounded-full h-32 w-32 border-b-2 border-aero-light mx-auto mb-4"
+          aria-hidden="true"
+        ></div>
+        <h2 id="loading-title" className="text-white text-xl font-semibold">
           Loading flight data...
         </h2>
       </div>
@@ -75,7 +83,11 @@ export const DashboardPage: React.FC = () => {
 
   // Show error banner instead of replacing entire content
   const ErrorBanner = () => (
-    <div className="bg-red-600 text-white text-center py-2 mb-4">
+    <div
+      className="bg-error text-white text-center py-2 mb-4"
+      role="alert"
+      aria-live="assertive"
+    >
       <p>Error loading data: {String(error)}</p>
     </div>
   );
@@ -94,17 +106,22 @@ export const DashboardPage: React.FC = () => {
     : [];
 
   return (
-    <div data-testid="dashboard-page" className="min-h-screen">
+    <div
+      data-testid="dashboard-page"
+      className="min-h-screen"
+      role="main"
+      aria-label="Flight dashboard"
+    >
       {loading && <LoadingOverlay />}
       {error && <ErrorBanner />}
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <header className="text-center mb-8">
           <h1
             data-testid="dashboard-title"
             className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3"
           >
-            <Plane className="h-10 w-10 text-aero-light" />
+            <Plane className="h-10 w-10 text-aero-light" aria-hidden="true" />
             Aero Dashboard
           </h1>
           <p
@@ -118,17 +135,26 @@ export const DashboardPage: React.FC = () => {
               Last updated: {lastUpdate.toLocaleTimeString()} |{" "}
               {statistics?.totalFlights || 0} aircraft in the air
               {isFromCache && (
-                <span className="ml-2 px-2 py-1 bg-aero-yellow text-white rounded text-xs">
+                <span
+                  className="ml-2 px-2 py-1 bg-aero-yellow text-white rounded text-xs"
+                  aria-label="Data from cache"
+                >
                   📦 Cached
                 </span>
               )}
               {isFromMock && (
-                <span className="ml-2 px-2 py-1 bg-aero-purple text-white rounded text-xs">
+                <span
+                  className="ml-2 px-2 py-1 bg-aero-purple text-white rounded text-xs"
+                  aria-label="Mock data"
+                >
                   🎭 Mock Data
                 </span>
               )}
               {autoRefreshEnabled && (
-                <span className="ml-2 px-2 py-1 bg-aero-green text-white rounded text-xs">
+                <span
+                  className="ml-2 px-2 py-1 bg-aero-green text-white rounded text-xs"
+                  aria-label="Auto-refresh enabled"
+                >
                   🔄 Auto-refresh
                 </span>
               )}
@@ -138,25 +164,33 @@ export const DashboardPage: React.FC = () => {
               onClick={refreshData}
               disabled={loading}
               className="flex items-center gap-2 px-3 py-1 bg-aero-blue hover:bg-aero-dark disabled:bg-aero-gray-dark text-white rounded-lg transition-colors text-sm"
+              aria-label="Refresh flight data"
             >
               <RefreshCw
                 className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+                aria-hidden="true"
               />
               Refresh
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Stats Cards */}
-        <div
+        <section
           data-testid="stats-cards"
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
+          aria-label="Flight statistics"
         >
           <div
             data-testid="stat-aircraft-tracked"
             className="aero-card text-center"
+            role="region"
+            aria-label="Aircraft tracked statistics"
           >
-            <Plane className="h-8 w-8 mx-auto mb-2 text-aero-light" />
+            <Plane
+              className="h-8 w-8 mx-auto mb-2 text-aero-light"
+              aria-hidden="true"
+            />
             <h3
               data-testid="stat-aircraft-count"
               className="text-2xl font-bold text-white"
@@ -165,8 +199,16 @@ export const DashboardPage: React.FC = () => {
             </h3>
             <p className="text-aero-light">Aircraft Tracked</p>
           </div>
-          <div data-testid="stat-countries" className="aero-card text-center">
-            <MapPin className="h-8 w-8 mx-auto mb-2 text-aero-green" />
+          <div
+            data-testid="stat-countries"
+            className="aero-card text-center"
+            role="region"
+            aria-label="Countries statistics"
+          >
+            <MapPin
+              className="h-8 w-8 mx-auto mb-2 text-aero-green"
+              aria-hidden="true"
+            />
             <h3
               data-testid="stat-countries-count"
               className="text-2xl font-bold text-white"
@@ -175,8 +217,16 @@ export const DashboardPage: React.FC = () => {
             </h3>
             <p className="text-aero-light">Countries</p>
           </div>
-          <div data-testid="stat-avg-speed" className="aero-card text-center">
-            <Activity className="h-8 w-8 mx-auto mb-2 text-aero-yellow" />
+          <div
+            data-testid="stat-avg-speed"
+            className="aero-card text-center"
+            role="region"
+            aria-label="Average speed statistics"
+          >
+            <Activity
+              className="h-8 w-8 mx-auto mb-2 text-aero-yellow"
+              aria-hidden="true"
+            />
             <h3
               data-testid="stat-speed-value"
               className="text-2xl font-bold text-white"
@@ -188,8 +238,13 @@ export const DashboardPage: React.FC = () => {
           <div
             data-testid="stat-avg-altitude"
             className="aero-card text-center"
+            role="region"
+            aria-label="Average altitude statistics"
           >
-            <TrendingUp className="h-8 w-8 mx-auto mb-2 text-aero-purple" />
+            <TrendingUp
+              className="h-8 w-8 mx-auto mb-2 text-aero-purple"
+              aria-hidden="true"
+            />
             <h3
               data-testid="stat-altitude-value"
               className="text-2xl font-bold text-white"
@@ -198,17 +253,20 @@ export const DashboardPage: React.FC = () => {
             </h3>
             <p className="text-aero-light">Avg Altitude</p>
           </div>
-        </div>
+        </section>
 
         {/* Charts Grid */}
-        <div
+        <section
           data-testid="charts-grid"
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8"
+          aria-label="Flight data charts"
         >
           {/* Altitude Distribution */}
           <div
             data-testid="chart-altitude-distribution"
             className="chart-container"
+            role="img"
+            aria-label="Bar chart showing altitude distribution of aircraft"
           >
             <h3 className="text-xl font-semibold text-white mb-4">
               Altitude Distribution
@@ -235,7 +293,12 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Top Countries */}
-          <div data-testid="chart-top-countries" className="chart-container">
+          <div
+            data-testid="chart-top-countries"
+            className="chart-container"
+            role="img"
+            aria-label="Horizontal bar chart showing top countries by aircraft count"
+          >
             <h3 className="text-xl font-semibold text-white mb-4">
               Top Countries by Aircraft Count
             </h3>
@@ -269,7 +332,12 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Speed vs Altitude */}
-          <div data-testid="chart-speed-altitude" className="chart-container">
+          <div
+            data-testid="chart-speed-altitude"
+            className="chart-container"
+            role="img"
+            aria-label="Scatter plot showing correlation between speed and altitude"
+          >
             <h3 className="text-xl font-semibold text-white mb-4">
               Speed vs Altitude
             </h3>
@@ -306,6 +374,8 @@ export const DashboardPage: React.FC = () => {
           <div
             data-testid="chart-country-distribution"
             className="chart-container"
+            role="img"
+            aria-label="Pie chart showing distribution of aircraft by country"
           >
             <h3 className="text-xl font-semibold text-white mb-4">
               Country Distribution
@@ -342,7 +412,7 @@ export const DashboardPage: React.FC = () => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

@@ -15,6 +15,8 @@ export const Navigation: React.FC = () => {
     <nav
       data-testid="navigation"
       className="bg-aero-gray-dark/90 backdrop-blur-sm border-b border-aero-gray-dark sticky top-0 z-50"
+      role="navigation"
+      aria-label="Main navigation"
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
@@ -22,12 +24,17 @@ export const Navigation: React.FC = () => {
             to="/aero-app"
             data-testid="logo-link"
             className="flex items-center gap-2 text-white font-bold text-xl"
+            aria-label="Aero Dashboard - Go to homepage"
           >
-            <BarChart3 className="h-6 w-6 text-aero-light" />
-            Aero Dashboard
+            <BarChart3 className="h-6 w-6 text-aero-light" aria-hidden="true" />
+            <span>Aero Dashboard</span>
           </Link>
 
-          <div className="flex space-x-1">
+          <div
+            className="flex space-x-1"
+            role="menubar"
+            aria-label="Navigation menu"
+          >
             {navItems.map(({ path, label, icon: Icon }) => (
               <Link
                 key={path}
@@ -38,9 +45,12 @@ export const Navigation: React.FC = () => {
                     ? "bg-aero-blue text-white"
                     : "text-aero-gray-light hover:text-white hover:bg-aero-gray-dark"
                 }`}
+                role="menuitem"
+                aria-current={location.pathname === path ? "page" : undefined}
+                aria-label={`Navigate to ${label} page`}
               >
-                <Icon className="h-4 w-4" />
-                {label}
+                <Icon className="h-4 w-4" aria-hidden="true" />
+                <span>{label}</span>
               </Link>
             ))}
           </div>

@@ -20,10 +20,21 @@ export const MapPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div
+        className="min-h-screen flex items-center justify-center"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="map-loading-title"
+      >
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-aero-light mx-auto mb-4"></div>
-          <h2 className="text-white text-xl font-semibold">
+          <div
+            className="animate-spin rounded-full h-32 w-32 border-b-2 border-aero-light mx-auto mb-4"
+            aria-hidden="true"
+          ></div>
+          <h2
+            id="map-loading-title"
+            className="text-white text-xl font-semibold"
+          >
             Loading flight map...
           </h2>
         </div>
@@ -32,10 +43,15 @@ export const MapPage: React.FC = () => {
   }
 
   return (
-    <div data-testid="map-page" className="min-h-screen">
+    <div
+      data-testid="map-page"
+      className="min-h-screen"
+      role="main"
+      aria-label="Live flight map"
+    >
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <header className="text-center mb-8">
           <h1
             data-testid="map-title"
             className="text-4xl font-bold text-white mb-2"
@@ -49,15 +65,20 @@ export const MapPage: React.FC = () => {
             Last updated: {lastUpdate.toLocaleTimeString()} | {flights.length}{" "}
             aircraft visible
           </p>
-        </div>
+        </header>
 
         {/* Map */}
-        <div data-testid="map-container" className="chart-container">
+        <section
+          data-testid="map-container"
+          className="chart-container"
+          aria-label="Interactive map showing aircraft positions"
+        >
           <div className="h-[80vh] rounded-lg overflow-hidden">
             <MapContainer
               center={[50, 10]}
               zoom={4}
               style={{ height: "100%", width: "100%" }}
+              aria-label="Interactive map with aircraft markers"
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -75,6 +96,11 @@ export const MapPage: React.FC = () => {
                     weight={1}
                     opacity={0.8}
                     fillOpacity={0.6}
+                    aria-label={`Aircraft ${
+                      flight.callsign || flight.icao24
+                    } at ${flight.latitude?.toFixed(
+                      2
+                    )}, ${flight.longitude?.toFixed(2)}`}
                   >
                     <Popup>
                       <div className="text-sm">
@@ -102,7 +128,7 @@ export const MapPage: React.FC = () => {
                 ))}
             </MapContainer>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

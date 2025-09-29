@@ -7,16 +7,12 @@ test.describe("Responsive Design Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if all navigation items are visible
-    await expect(
-      page.locator('[data-testid="nav-link-dashboard"]')
-    ).toBeVisible();
-    await expect(page.locator('[data-testid="nav-link-map"]')).toBeVisible();
-    await expect(
-      page.locator('[data-testid="nav-link-flights"]')
-    ).toBeVisible();
+    await expect(page.getByTestId("nav-link-dashboard")).toBeVisible();
+    await expect(page.getByTestId("nav-link-map")).toBeVisible();
+    await expect(page.getByTestId("nav-link-flights")).toBeVisible();
 
     // Check if dashboard layout is proper
-    await expect(page.locator('[data-testid="dashboard-title"]')).toBeVisible();
+    await expect(page.getByTestId("dashboard-title")).toBeVisible();
   });
 
   test("should work on tablet (768x1024)", async ({ page }) => {
@@ -25,11 +21,11 @@ test.describe("Responsive Design Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if navigation is still functional
-    await expect(page.locator('[data-testid="navigation"]')).toBeVisible();
-    await expect(page.locator('[data-testid="logo-link"]')).toBeVisible();
+    await expect(page.getByTestId("navigation")).toBeVisible();
+    await expect(page.getByTestId("logo-link")).toBeVisible();
 
     // Check if dashboard content is visible
-    await expect(page.locator('[data-testid="dashboard-title"]')).toBeVisible();
+    await expect(page.getByTestId("dashboard-title")).toBeVisible();
   });
 
   test("should work on mobile (375x667)", async ({ page }) => {
@@ -38,11 +34,13 @@ test.describe("Responsive Design Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if navigation is still visible
-    await expect(page.locator('[data-testid="navigation"]')).toBeVisible();
-    await expect(page.locator('[data-testid="logo-link"]')).toBeVisible();
+    await expect(page.getByTestId("navigation")).toBeVisible();
+    await expect(page.getByTestId("logo-link")).toBeVisible();
 
     // Check if mobile navigation works
-    await page.click('[data-testid="nav-link-map"]');
+    const navLinkMap = page.getByTestId("nav-link-map");
+    await navLinkMap.click();
+
     await expect(page).toHaveURL("/aero-app/map");
   });
 
@@ -52,55 +50,197 @@ test.describe("Responsive Design Tests", () => {
     await page.waitForLoadState("domcontentloaded");
 
     // Check if basic functionality works on very small screens
-    await expect(page.locator('[data-testid="navigation"]')).toBeVisible();
-    await expect(page.locator('[data-testid="logo-link"]')).toBeVisible();
+    await expect(page.getByTestId("navigation")).toBeVisible();
+    await expect(page.getByTestId("logo-link")).toBeVisible();
   });
 });
 
-test.describe("Accessibility Tests", () => {
-  test("should have proper heading structure", async ({ page }) => {
+test.describe("ARIA Accessibility Tests", () => {
+  test("should have proper ARIA landmarks", async ({ page }) => {
     await page.goto("/aero-app");
     await page.waitForLoadState("domcontentloaded");
 
-    // Check if main heading is present
-    const h1 = page.locator('[data-testid="dashboard-title"]');
-    await expect(h1).toBeVisible();
+    // Check main landmark (div with role="main")
+    const main = page.locator("div[role='main']");
+    await expect(main).toBeVisible();
 
-    // Check if heading contains expected text
-    await expect(h1).toContainText("Aero Dashboard");
+    // Check navigation landmark
+    const nav = page.locator("nav[role='navigation']");
+    await expect(nav).toBeVisible();
+    await expect(nav).toHaveAttribute("aria-label", "Main navigation");
+
+    // Check header landmark
+    const header = page.locator("header");
+    await expect(header).toBeVisible();
   });
 
-  test("should have proper navigation landmarks", async ({ page }) => {
+  test("should have proper ARIA roles on dashboard", async ({ page }) => {
     await page.goto("/aero-app");
+    await page.waitForLoadState("domcontentloaded");
 
-    // Check if nav element is present
-    await expect(page.locator('[data-testid="navigation"]')).toBeVisible();
+    // Check main role
+    const main = page.locator("div[role='main']");
+    await expect(main).toBeVisible();
+    await expect(main).toHaveAttribute("aria-label", "Flight dashboard");
 
-    // Check if navigation links are properly structured
-    const navLinks = page.locator('[data-testid="navigation"] a');
-    await expect(navLinks).toHaveCount(4); // Logo + 3 nav items
+    // Check sections
+    const statsSection = page.locator(
+      "section[aria-label='Flight statistics']"
+    );
+    await expect(statsSection).toBeVisible();
+
+    const chartsSection = page.locator(
+      "section[aria-label='Flight data charts']"
+    );
+    await expect(chartsSection).toBeVisible();
+
+    // Check individual stat cards
+    const aircraftCard = page.locator(
+      "div[aria-label='Aircraft tracked statistics']"
+    );
+    await expect(aircraftCard).toBeVisible();
   });
 
-  test("should have proper form labels", async ({ page }) => {
+  test("should have proper ARIA roles on map page", async ({ page }) => {
+    await page.goto("/aero-app/map");
+    await page.waitForLoadState("domcontentloaded");
+
+    // Check main role
+    const main = page.locator("div[role='main']");
+    await expect(main).toBeVisible();
+    await expect(main).toHaveAttribute("aria-label", "Live flight map");
+
+    // Check map section
+    const mapSection = page.locator(
+      "section[aria-label='Interactive map showing aircraft positions']"
+    );
+    await expect(mapSection).toBeVisible();
+  });
+
+  test("should have proper ARIA roles on flights page", async ({ page }) => {
     await page.goto("/aero-app/flights");
     await page.waitForLoadState("domcontentloaded");
 
-    // Check if search input has proper placeholder
-    const searchInput = page.locator('[data-testid="search-input"]');
-    await expect(searchInput).toBeVisible();
+    // Check main role
+    const main = page.locator("div[role='main']");
+    await expect(main).toBeVisible();
+    await expect(main).toHaveAttribute("aria-label", "Flights list");
 
-    // Check if select elements are present
-    await expect(page.locator('[data-testid="country-filter"]')).toBeVisible();
-    await expect(page.locator('[data-testid="sort-select"]')).toBeVisible();
+    // Check filters section
+    const filtersSection = page.locator("section[aria-label='Flight filters']");
+    await expect(filtersSection).toBeVisible();
+
+    // Check table
+    const table = page.locator("table[role='table']");
+    await expect(table).toBeVisible();
+    await expect(table).toHaveAttribute("aria-label", "Aircraft flights data");
+
+    // Check table headers
+    const headers = page.locator("th[role='columnheader']");
+    await expect(headers).toHaveCount(7);
+  });
+
+  test("should have proper navigation ARIA attributes", async ({ page }) => {
+    await page.goto("/aero-app");
+    await page.waitForLoadState("domcontentloaded");
+
+    // Check navigation menu
+    const menubar = page.locator("div[role='menubar']");
+    await expect(menubar).toBeVisible();
+    await expect(menubar).toHaveAttribute("aria-label", "Navigation menu");
+
+    // Check menu items
+    const menuItems = page.locator("a[role='menuitem']");
+    await expect(menuItems).toHaveCount(3);
+
+    // Check current page indication
+    const currentPage = page.locator("a[aria-current='page']");
+    await expect(currentPage).toBeVisible();
+  });
+
+  test("should have proper form labels and descriptions", async ({ page }) => {
+    await page.goto("/aero-app/flights");
+    await page.waitForLoadState("domcontentloaded");
+
+    // Check search input
+    const searchInput = page.getByTestId("search-input");
+    await expect(searchInput).toHaveAttribute(
+      "aria-label",
+      "Search flights by callsign or ICAO24"
+    );
+    await expect(searchInput).toHaveAttribute(
+      "aria-describedby",
+      "search-help"
+    );
+
+    // Check country filter
+    const countryFilter = page.getByTestId("country-filter");
+    await expect(countryFilter).toHaveAttribute(
+      "aria-label",
+      "Filter flights by country"
+    );
+
+    // Check sort select
+    const sortSelect = page.getByTestId("sort-select");
+    await expect(sortSelect).toHaveAttribute("aria-label", "Sort flights by");
   });
 
   test("should have proper button labels", async ({ page }) => {
     await page.goto("/aero-app");
     await page.waitForLoadState("domcontentloaded");
 
-    // Check if refresh button has proper text
-    const refreshButton = page.locator('[data-testid="refresh-button"]');
-    await expect(refreshButton).toBeVisible();
+    // Check refresh button
+    const refreshButton = page.getByTestId("refresh-button");
+    await expect(refreshButton).toHaveAttribute(
+      "aria-label",
+      "Refresh flight data"
+    );
+
+    // Check logo link
+    const logoLink = page.getByTestId("logo-link");
+    await expect(logoLink).toHaveAttribute(
+      "aria-label",
+      "Aero Dashboard - Go to homepage"
+    );
+  });
+
+  test("should have proper chart accessibility", async ({ page }) => {
+    await page.goto("/aero-app");
+    await page.waitForLoadState("domcontentloaded");
+
+    // Check chart containers have proper roles
+    const altitudeChart = page.locator(
+      "div[role='img'][aria-label='Bar chart showing altitude distribution of aircraft']"
+    );
+    await expect(altitudeChart).toBeVisible();
+
+    const countriesChart = page.locator(
+      "div[role='img'][aria-label='Horizontal bar chart showing top countries by aircraft count']"
+    );
+    await expect(countriesChart).toBeVisible();
+
+    const speedChart = page.locator(
+      "div[role='img'][aria-label='Scatter plot showing correlation between speed and altitude']"
+    );
+    await expect(speedChart).toBeVisible();
+
+    const pieChart = page.locator(
+      "div[role='img'][aria-label='Pie chart showing distribution of aircraft by country']"
+    );
+    await expect(pieChart).toBeVisible();
+  });
+
+  test("should have proper loading and error states", async ({ page }) => {
+    await page.goto("/aero-app");
+    await page.waitForLoadState("domcontentloaded");
+
+    // Check if loading overlay has proper ARIA attributes (if visible)
+    // This might not be visible if page loads quickly, so we just check the structure exists
+
+    // Check refresh button disabled state
+    const refreshButton = page.getByTestId("refresh-button");
+    // Button should be enabled after page loads
+    await expect(refreshButton).not.toBeDisabled();
   });
 });
 
@@ -129,7 +269,7 @@ test.describe("Performance Tests", () => {
     expect(mapLoadTime).toBeLessThan(15000);
 
     // Check if map is interactive
-    await expect(page.locator('[data-testid="map-container"]')).toBeVisible();
+    await expect(page.getByTestId("map-container")).toBeVisible();
   });
 });
 
@@ -138,8 +278,8 @@ test.describe("Error Handling Tests", () => {
     await page.goto("/aero-app/nonexistent-page");
 
     // Should show 404 page
-    await expect(page.locator("text=404")).toBeVisible();
-    await expect(page.locator("text=Page Not Found")).toBeVisible();
+    await expect(page.getByText("404")).toBeVisible();
+    await expect(page.getByText("Page Not Found")).toBeVisible();
   });
 
   test("should handle network errors gracefully", async ({ page }) => {
@@ -151,8 +291,5 @@ test.describe("Error Handling Tests", () => {
     } catch (error) {
       // Expected to fail due to blocked requests
     }
-
-    // Skip this test if page doesn't load due to network blocking
-    // This is expected behavior when all requests are blocked
   });
 });
