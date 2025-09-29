@@ -8,6 +8,9 @@
   --color-aero-yellow: #f59e0b;
   --color-aero-purple: #8b5cf6;
   --color-aero-gray: #6b7280;
+  --color-aero-gray-light: #9ca3af;
+  --color-aero-gray-dark: #374151;
+  --color-aero-gray-darker: #1f2937;
   --color-aero-dark-bg: #1f2937;
   --color-aero-card-bg: rgba(255, 255, 255, 0.25);
   --color-aero-border: rgba(255, 255, 255, 0.5);

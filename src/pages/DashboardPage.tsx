@@ -1,5 +1,5 @@
 import React from "react";
-import { useFlightContext } from "../contexts/FlightContext";
+import { useFlightContext } from "../presentation/hooks/use-flight-context";
 import {
   BarChart,
   Bar,
@@ -25,7 +25,14 @@ const COLORS = [
 ];
 
 export const DashboardPage: React.FC = () => {
-  const { stats, loading, lastUpdate, error, refreshData } = useFlightContext();
+  const {
+    statistics,
+    loading,
+    lastUpdate,
+    error,
+    refreshData,
+    autoRefreshEnabled,
+  } = useFlightContext();
   const [isFromCache, setIsFromCache] = React.useState(false);
 
   // Check if data is from cache by looking at console logs
@@ -49,10 +56,7 @@ export const DashboardPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div
-            className="animate-spin rounded-full h-32 w-32 border-b-2 mx-auto mb-4"
-            style={{ borderColor: "var(--color-aero-light)" }}
-          ></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-aero-light mx-auto mb-4"></div>
           <h2 className="text-white text-xl font-semibold">
             Loading flight data...
           </h2>
@@ -68,18 +72,30 @@ export const DashboardPage: React.FC = () => {
           <h2 className="text-red-400 text-xl font-semibold mb-4">
             Error loading data
           </h2>
-          <p className="text-gray-400">{error}</p>
+          <p className="text-aero-gray-light">{String(error)}</p>
         </div>
       </div>
     );
   }
 
-  const altitudeChartData = Object.entries(stats.altitudeDistribution)
+  if (!statistics) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-aero-gray-light text-xl font-semibold">
+            No statistics available
+          </h2>
+        </div>
+      </div>
+    );
+  }
+
+  const altitudeChartData = Object.entries(statistics.altitudeDistribution)
     .map(([range, count]) => ({ range, count }))
     .sort((a, b) => parseInt(a.range) - parseInt(b.range));
 
-  const pieData = Object.entries(stats.countryDistribution)
-    .sort(([, a], [, b]) => b - a)
+  const pieData = Object.entries(statistics.countryDistribution)
+    .sort(([, a], [, b]) => (b as number) - (a as number))
     .slice(0, 5)
     .map(([country, count]) => ({ name: country, value: count }));
 
@@ -89,29 +105,31 @@ export const DashboardPage: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
-            <Plane
-              className="h-10 w-10"
-              style={{ color: "var(--color-aero-light)" }}
-            />
+            <Plane className="h-10 w-10 text-aero-light" />
             Aero Dashboard
           </h1>
-          <p className="text-lg" style={{ color: "var(--color-aero-light)" }}>
+          <p className="text-lg text-aero-light">
             Live Flight Tracking & Analytics
           </p>
           <div className="flex items-center justify-center gap-4 mt-2">
-            <p className="text-sm" style={{ color: "var(--color-aero-light)" }}>
+            <p className="text-sm text-aero-light">
               Last updated: {lastUpdate.toLocaleTimeString()} |{" "}
-              {stats.totalFlights} aircraft in the air
+              {statistics.totalFlights} aircraft in the air
               {isFromCache && (
-                <span className="ml-2 px-2 py-1 bg-yellow-600 text-yellow-100 rounded text-xs">
+                <span className="ml-2 px-2 py-1 bg-aero-yellow text-white rounded text-xs">
                   📦 Cached
+                </span>
+              )}
+              {autoRefreshEnabled && (
+                <span className="ml-2 px-2 py-1 bg-aero-green text-white rounded text-xs">
+                  🔄 Auto-refresh
                 </span>
               )}
             </p>
             <button
               onClick={refreshData}
               disabled={loading}
-              className="flex items-center gap-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+              className="flex items-center gap-2 px-3 py-1 bg-aero-blue hover:bg-aero-dark disabled:bg-aero-gray-dark text-white rounded-lg transition-colors text-sm"
             >
               <RefreshCw
                 className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
@@ -124,42 +142,32 @@ export const DashboardPage: React.FC = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="aero-card text-center">
-            <Plane
-              className="h-8 w-8 mx-auto mb-2"
-              style={{ color: "var(--color-aero-light)" }}
-            />
+            <Plane className="h-8 w-8 mx-auto mb-2 text-aero-light" />
             <h3 className="text-2xl font-bold text-white">
-              {stats.totalFlights}
+              {statistics.totalFlights}
             </h3>
-            <p style={{ color: "var(--color-aero-light)" }}>Aircraft Tracked</p>
+            <p className="text-aero-light">Aircraft Tracked</p>
           </div>
           <div className="aero-card text-center">
-            <MapPin
-              className="h-8 w-8 mx-auto mb-2"
-              style={{ color: "var(--color-aero-green)" }}
-            />
-            <h3 className="text-2xl font-bold text-white">{stats.countries}</h3>
-            <p style={{ color: "var(--color-aero-light)" }}>Countries</p>
+            <MapPin className="h-8 w-8 mx-auto mb-2 text-aero-green" />
+            <h3 className="text-2xl font-bold text-white">
+              {statistics.countriesCount}
+            </h3>
+            <p className="text-aero-light">Countries</p>
           </div>
           <div className="aero-card text-center">
-            <Activity
-              className="h-8 w-8 mx-auto mb-2"
-              style={{ color: "var(--color-aero-yellow)" }}
-            />
+            <Activity className="h-8 w-8 mx-auto mb-2 text-aero-yellow" />
             <h3 className="text-2xl font-bold text-white">
-              {Math.round(stats.avgSpeed)} km/h
+              {Math.round(statistics.averageSpeed)} km/h
             </h3>
-            <p style={{ color: "var(--color-aero-light)" }}>Avg Speed</p>
+            <p className="text-aero-light">Avg Speed</p>
           </div>
           <div className="aero-card text-center">
-            <TrendingUp
-              className="h-8 w-8 mx-auto mb-2"
-              style={{ color: "var(--color-aero-purple)" }}
-            />
+            <TrendingUp className="h-8 w-8 mx-auto mb-2 text-aero-purple" />
             <h3 className="text-2xl font-bold text-white">
-              {Math.round(stats.avgAltitude / 1000)} km
+              {Math.round(statistics.averageAltitude / 1000)} km
             </h3>
-            <p style={{ color: "var(--color-aero-light)" }}>Avg Altitude</p>
+            <p className="text-aero-light">Avg Altitude</p>
           </div>
         </div>
 
@@ -183,7 +191,7 @@ export const DashboardPage: React.FC = () => {
                     color: "white",
                   }}
                 />
-                <Bar dataKey="count" fill="var(--color-aero-blue)" />
+                <Bar dataKey="count" fill="#3B82F6" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -194,7 +202,7 @@ export const DashboardPage: React.FC = () => {
               Top Countries by Aircraft Count
             </h3>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={stats.topCountries} layout="horizontal">
+              <BarChart data={statistics.topCountries} layout="horizontal">
                 <CartesianGrid strokeDasharray="3 3" stroke="#6B7280" />
                 <XAxis type="number" stroke="#FFFFFF" />
                 <YAxis
@@ -211,7 +219,7 @@ export const DashboardPage: React.FC = () => {
                     color: "white",
                   }}
                 />
-                <Bar dataKey="count" fill="var(--color-aero-green)" />
+                <Bar dataKey="count" fill="#10B981" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -222,7 +230,7 @@ export const DashboardPage: React.FC = () => {
               Speed vs Altitude
             </h3>
             <ResponsiveContainer width="100%" height={300}>
-              <ScatterChart data={stats.speedAltitudeData}>
+              <ScatterChart data={statistics.speedAltitudeCorrelation}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#6B7280" />
                 <XAxis dataKey="speed" name="Speed" stroke="#FFFFFF" />
                 <YAxis dataKey="altitude" name="Altitude" stroke="#FFFFFF" />
@@ -234,7 +242,7 @@ export const DashboardPage: React.FC = () => {
                     color: "white",
                   }}
                 />
-                <Scatter dataKey="altitude" fill="var(--color-aero-yellow)" />
+                <Scatter dataKey="altitude" fill="#F59E0B" />
               </ScatterChart>
             </ResponsiveContainer>
           </div>

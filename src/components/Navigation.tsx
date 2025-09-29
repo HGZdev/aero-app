@@ -12,17 +12,14 @@ export const Navigation: React.FC = () => {
   ];
 
   return (
-    <nav className="bg-gray-900/90 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-50">
+    <nav className="bg-aero-gray-darker/90 backdrop-blur-sm border-b border-aero-gray-dark sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link
             to="/"
             className="flex items-center gap-2 text-white font-bold text-xl"
           >
-            <BarChart3
-              className="h-6 w-6"
-              style={{ color: "var(--color-aero-light)" }}
-            />
+            <BarChart3 className="h-6 w-6 text-aero-light" />
             Aero Dashboard
           </Link>
 
@@ -33,8 +30,8 @@ export const Navigation: React.FC = () => {
                 to={path}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                   location.pathname === path
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-300 hover:text-white hover:bg-gray-800"
+                    ? "bg-aero-blue text-white"
+                    : "text-aero-gray-light hover:text-white hover:bg-aero-gray-darker"
                 }`}
               >
                 <Icon className="h-4 w-4" />

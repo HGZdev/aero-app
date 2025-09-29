@@ -21,10 +21,7 @@ export const FlightsListPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div
-            className="animate-spin rounded-full h-32 w-32 border-b-2 mx-auto mb-4"
-            style={{ borderColor: "var(--color-aero-light)" }}
-          ></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-aero-light mx-auto mb-4"></div>
           <h2 className="text-white text-xl font-semibold">
             Loading flights list...
           </h2>
@@ -70,19 +67,13 @@ export const FlightsListPage: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
-            <Plane
-              className="h-10 w-10"
-              style={{ color: "var(--color-aero-light)" }}
-            />
+            <Plane className="h-10 w-10 text-aero-light" />
             Flights List
           </h1>
-          <p className="text-lg" style={{ color: "var(--color-aero-light)" }}>
+          <p className="text-lg text-aero-light">
             Detailed aircraft information
           </p>
-          <p
-            className="text-sm mt-2"
-            style={{ color: "var(--color-aero-light)" }}
-          >
+          <p className="text-sm mt-2 text-aero-light">
             Last updated: {lastUpdate.toLocaleTimeString()} |{" "}
             {filteredFlights.length} of {flights.length} aircraft
           </p>
@@ -92,22 +83,22 @@ export const FlightsListPage: React.FC = () => {
         <div className="aero-card mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-aero-gray-light" />
               <input
                 type="text"
                 placeholder="Search by callsign or ICAO24..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2 bg-aero-gray-darker border border-aero-gray-dark rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-aero-blue"
               />
             </div>
 
             <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-aero-gray-light" />
               <select
                 value={filterCountry}
                 onChange={(e) => setFilterCountry(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2 bg-aero-gray-darker border border-aero-gray-dark rounded-lg text-white focus:outline-none focus:border-aero-blue"
               >
                 <option value="">All Countries</option>
                 {countries.map((country) => (
@@ -122,7 +113,7 @@ export const FlightsListPage: React.FC = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 bg-aero-gray-darker border border-aero-gray-dark rounded-lg text-white focus:outline-none focus:border-aero-blue"
               >
                 <option value="callsign">Sort by Callsign</option>
                 <option value="country">Sort by Country</option>
@@ -138,7 +129,7 @@ export const FlightsListPage: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-600">
+                <tr className="border-b border-aero-gray-dark">
                   <th className="text-left py-3 px-4 text-white font-semibold">
                     Callsign
                   </th>
@@ -166,37 +157,28 @@ export const FlightsListPage: React.FC = () => {
                 {filteredFlights.map((flight, index) => (
                   <tr
                     key={flight.icao24}
-                    className={`border-b border-gray-700 ${
-                      index % 2 === 0 ? "bg-gray-800/50" : ""
+                    className={`border-b border-aero-gray-dark ${
+                      index % 2 === 0 ? "bg-aero-gray-darker/50" : ""
                     }`}
                   >
                     <td className="py-3 px-4 text-white">
                       <div className="flex items-center gap-2">
-                        <Plane
-                          className="h-4 w-4"
-                          style={{ color: "var(--color-aero-blue)" }}
-                        />
+                        <Plane className="h-4 w-4 text-aero-blue" />
                         {flight.callsign || "N/A"}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-gray-300 font-mono text-sm">
+                    <td className="py-3 px-4 text-aero-gray-light font-mono text-sm">
                       {flight.icao24}
                     </td>
                     <td className="py-3 px-4 text-white">
                       <div className="flex items-center gap-2">
-                        <MapPin
-                          className="h-4 w-4"
-                          style={{ color: "var(--color-aero-green)" }}
-                        />
+                        <MapPin className="h-4 w-4 text-aero-green" />
                         {flight.originCountry || "N/A"}
                       </div>
                     </td>
                     <td className="py-3 px-4 text-white">
                       <div className="flex items-center gap-2">
-                        <TrendingUp
-                          className="h-4 w-4"
-                          style={{ color: "var(--color-aero-purple)" }}
-                        />
+                        <TrendingUp className="h-4 w-4 text-aero-purple" />
                         {flight.altitude
                           ? `${flight.altitude.toLocaleString()} ft`
                           : "N/A"}
@@ -204,19 +186,16 @@ export const FlightsListPage: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 text-white">
                       <div className="flex items-center gap-2">
-                        <Activity
-                          className="h-4 w-4"
-                          style={{ color: "var(--color-aero-yellow)" }}
-                        />
+                        <Activity className="h-4 w-4 text-aero-yellow" />
                         {flight.velocity
                           ? `${flight.velocity.toFixed(0)} km/h`
                           : "N/A"}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-gray-300">
+                    <td className="py-3 px-4 text-aero-gray-light">
                       {flight.trueTrack ? `${flight.trueTrack}°` : "N/A"}
                     </td>
-                    <td className="py-3 px-4 text-gray-300">
+                    <td className="py-3 px-4 text-aero-gray-light">
                       {flight.latitude && flight.longitude ? (
                         <span className="font-mono text-sm">
                           {flight.latitude.toFixed(4)},{" "}
@@ -234,7 +213,7 @@ export const FlightsListPage: React.FC = () => {
 
           {filteredFlights.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-gray-400">
+              <p className="text-aero-gray-light">
                 No flights found matching your criteria.
               </p>
             </div>
