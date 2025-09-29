@@ -1,12 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { FlightProvider } from "./contexts/FlightContext";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { FlightProvider } from "./contexts/SimplifiedFlightContext";
 import { Navigation } from "./components/Navigation";
 import { DashboardPage } from "./pages/DashboardPage";
 import { MapPage } from "./pages/MapPage";
 import { FlightsListPage } from "./pages/FlightsListPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { ErrorBoundary } from "./presentation/components/ErrorBoundary";
-import { NetworkStatus } from "./presentation/components/ErrorComponents";
+import { ErrorBoundary, NetworkStatus } from "./components/ErrorComponents";
 import { useState, useEffect } from "react";
 
 function App() {
@@ -39,9 +43,10 @@ function App() {
             <NetworkStatus isOnline={isOnline} lastError={lastError} />
             <Navigation />
             <Routes>
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/map" element={<MapPage />} />
-              <Route path="/flights" element={<FlightsListPage />} />
+              <Route path="/" element={<Navigate to="/aero-app" replace />} />
+              <Route path="/aero-app" element={<DashboardPage />} />
+              <Route path="/aero-app/map" element={<MapPage />} />
+              <Route path="/aero-app/flights" element={<FlightsListPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>

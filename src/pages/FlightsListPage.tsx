@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFlightContext } from "../contexts/FlightContext";
+import { useFlightContext } from "../contexts/SimplifiedFlightContext";
 import {
   Search,
   Filter,

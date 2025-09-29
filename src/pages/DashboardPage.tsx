@@ -1,5 +1,5 @@
 import React from "react";
-import { useFlightContext } from "../presentation/hooks/use-flight-context";
+import { useFlightContext } from "../contexts/SimplifiedFlightContext";
 import {
   BarChart,
   Bar,
@@ -34,14 +34,23 @@ export const DashboardPage: React.FC = () => {
     autoRefreshEnabled,
   } = useFlightContext();
   const [isFromCache, setIsFromCache] = React.useState(false);
+  const [isFromMock, setIsFromMock] = React.useState(false);
 
-  // Check if data is from cache by looking at console logs
+  // Check if data is from cache or mock by looking at console logs
   React.useEffect(() => {
     const originalLog = console.log;
     console.log = (...args) => {
       if (args[0]?.includes?.("Using cached")) {
         setIsFromCache(true);
+        setIsFromMock(false);
       } else if (args[0]?.includes?.("Fetching fresh")) {
+        setIsFromCache(false);
+        setIsFromMock(false);
+      } else if (args[0]?.includes?.("Using mock data")) {
+        setIsFromMock(true);
+        setIsFromCache(false);
+      } else if (args[0]?.includes?.("Successfully fetched data from API")) {
+        setIsFromMock(false);
         setIsFromCache(false);
       }
       originalLog(...args);
@@ -120,6 +129,11 @@ export const DashboardPage: React.FC = () => {
                   📦 Cached
                 </span>
               )}
+              {isFromMock && (
+                <span className="ml-2 px-2 py-1 bg-aero-purple text-white rounded text-xs">
+                  🎭 Mock Data
+                </span>
+              )}
               {autoRefreshEnabled && (
                 <span className="ml-2 px-2 py-1 bg-aero-green text-white rounded text-xs">
                   🔄 Auto-refresh
@@ -158,14 +172,14 @@ export const DashboardPage: React.FC = () => {
           <div className="aero-card text-center">
             <Activity className="h-8 w-8 mx-auto mb-2 text-aero-yellow" />
             <h3 className="text-2xl font-bold text-white">
-              {Math.round(statistics.averageSpeed)} km/h
+              {Math.round(statistics.avgSpeed)} km/h
             </h3>
             <p className="text-aero-light">Avg Speed</p>
           </div>
           <div className="aero-card text-center">
             <TrendingUp className="h-8 w-8 mx-auto mb-2 text-aero-purple" />
             <h3 className="text-2xl font-bold text-white">
-              {Math.round(statistics.averageAltitude / 1000)} km
+              {Math.round(statistics.avgAltitude / 1000)} km
             </h3>
             <p className="text-aero-light">Avg Altitude</p>
           </div>

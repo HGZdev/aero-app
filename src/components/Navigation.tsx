@@ -6,9 +6,9 @@ export const Navigation: React.FC = () => {
   const location = useLocation();
 
   const navItems = [
-    { path: "/", label: "Dashboard", icon: Home },
-    { path: "/map", label: "Map", icon: Map },
-    { path: "/flights", label: "Flights", icon: List },
+    { path: "/aero-app", label: "Dashboard", icon: Home },
+    { path: "/aero-app/map", label: "Map", icon: Map },
+    { path: "/aero-app/flights", label: "Flights", icon: List },
   ];
 
   return (
@@ -16,7 +16,7 @@ export const Navigation: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link
-            to="/"
+            to="/aero-app"
             className="flex items-center gap-2 text-white font-bold text-xl"
           >
             <BarChart3 className="h-6 w-6 text-aero-light" />
