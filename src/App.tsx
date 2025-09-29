@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { FlightProvider } from "./contexts/SimplifiedFlightContext";
+import { FlightProvider } from "./contexts/FlightContext";
 import { Navigation } from "./components/Navigation";
 import { DashboardPage } from "./pages/DashboardPage";
 import { MapPage } from "./pages/MapPage";

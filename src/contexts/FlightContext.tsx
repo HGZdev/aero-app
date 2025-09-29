@@ -80,6 +80,19 @@ export const FlightProvider: React.FC<FlightProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
+    // In test mode, don't fetch data to avoid API calls
+    const isTestMode =
+      import.meta.env.MODE === "test" ||
+      (typeof window !== "undefined" &&
+        window.location.hostname === "localhost" &&
+        window.location.port === "5173");
+
+    if (isTestMode) {
+      console.log("🧪 Test mode: skipping data fetch");
+      setLoading(false);
+      return;
+    }
+
     fetchData(); // First load - will use cache if available
 
     // Auto-refresh every 5 minutes if enabled

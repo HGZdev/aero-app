@@ -1,6 +1,6 @@
 import React from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
-import { useFlightContext } from "../contexts/SimplifiedFlightContext";
+import { useFlightContext } from "../contexts/FlightContext";
 import "leaflet/dist/leaflet.css";
 
 // Fix for default markers in react-leaflet
